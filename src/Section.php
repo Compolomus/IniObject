@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Compolomus\IniObject;
 
+use InvalidArgumentException;
+
 class Section
 {
     private $name;
@@ -26,6 +28,37 @@ class Section
         }
 
         $this->params = $data;
+    }
+
+    /**
+     * @param string $name
+     * @param $value
+     */
+    public function add(string $name, $value): void
+    {
+        if (isset($this->params[$name])) {
+            throw new InvalidArgumentException('Overwrite parameter denied');
+        }
+        $this->params[$name] = new Param($name, $value);
+    }
+
+    /**
+     * @param string $name
+     */
+    public function remove(string $name): void
+    {
+        if (! isset($this->params[$name])) {
+            throw new InvalidArgumentException('Parameter not found for remove');
+        }
+        unset($this->params[$name]);
+    }
+
+    public function update(string $name, $value): void
+    {
+        if (! isset($this->params[$name])) {
+            throw new InvalidArgumentException('Parameter not found for update');
+        }
+        $this->params[$name] = new Param($name, $value);
     }
 
     /**

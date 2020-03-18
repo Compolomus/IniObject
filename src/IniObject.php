@@ -15,6 +15,12 @@ class IniObject
 
     private $sections;
 
+    /**
+     * IniObject constructor.
+     *
+     * @param string|null $filename
+     * @param array $config
+     */
     public function __construct(string $filename = null, array $config = [])
     {
         if (! count($config)) {
@@ -36,6 +42,9 @@ class IniObject
         }
     }
 
+    /**
+     * @param array $data
+     */
     private function sectionLoad(array $data): void
     {
         if (! count($data)) {
@@ -51,9 +60,50 @@ class IniObject
     }
 
     /**
+     * @param string $name
+     * @return Section
+     */
+    public function getSection(string $name): Section
+    {
+        if (! isset($this->sections[$name])) {
+            throw new InvalidArgumentException('Section not found');
+        }
+
+        return $this->sections[$name];
+    }
+
+    /**
+     * @param string $name
+     */
+    public function removeSection(string $name): void
+    {
+        if (! isset($this->sections[$name])) {
+            throw new InvalidArgumentException('Section not found for remove');
+        }
+        unset($this->sections[$name]);
+    }
+
+    public function addSection(string $name, array $section): void
+    {
+        if (isset($this->sections[$name])) {
+            throw new InvalidArgumentException('Overwrite section denied');
+        }
+        $this->sections[$name] = new Section($name, $section);
+    }
+
+    public function updateSection(string $name, array $section): void
+    {
+        if (! isset($this->sections[$name])) {
+            throw new InvalidArgumentException('Section not found for update');
+        }
+        $this->sections[$name] = new Section($name, $section);
+    }
+
+    /**
      * default config
      */
-    private function initDefaultConfig(): void
+    private
+    function initDefaultConfig(): void
     {
         $this->config = [
             'strict'    => false,
@@ -64,12 +114,15 @@ class IniObject
     /**
      * @param string $filename
      */
-    private function setFilename(string $filename): void
-    {
+    private
+    function setFilename(
+        string $filename
+    ): void {
         $this->filename = $filename;
     }
 
-    public function __toString()
+    public
+    function __toString()
     {
         $return = '';
 
@@ -84,8 +137,10 @@ class IniObject
      * @param string|null $filename
      * @return bool
      */
-    public function save(string $filename = null): bool
-    {
+    public
+    function save(
+        string $filename = null
+    ): bool {
         if ($filename) {
             $this->setFilename($filename);
         }
