@@ -102,8 +102,7 @@ class IniObject
     /**
      * default config
      */
-    private
-    function initDefaultConfig(): void
+    private function initDefaultConfig(): void
     {
         $this->config = [
             'strict'    => false,
@@ -114,15 +113,12 @@ class IniObject
     /**
      * @param string $filename
      */
-    private
-    function setFilename(
-        string $filename
-    ): void {
+    private function setFilename(string $filename): void
+    {
         $this->filename = $filename;
     }
 
-    public
-    function __toString()
+    public function __toString()
     {
         $return = '';
 
@@ -137,10 +133,8 @@ class IniObject
      * @param string|null $filename
      * @return bool
      */
-    public
-    function save(
-        string $filename = null
-    ): bool {
+    public function save(string $filename = null): bool
+    {
         if ($filename) {
             $this->setFilename($filename);
         }

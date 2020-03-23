@@ -78,7 +78,7 @@ class Section
         return $this->name;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $return = PHP_EOL . '[' . $this->getName() . ']' . PHP_EOL . PHP_EOL;
         foreach ($this->params as $param) {
