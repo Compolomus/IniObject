@@ -80,11 +80,11 @@ class Section
 
     public function __toString(): string
     {
-        $return = PHP_EOL . '[' . $this->getName() . ']' . PHP_EOL . PHP_EOL;
+        $return = '[' . $this->getName() . ']' . PHP_EOL . PHP_EOL;
         foreach ($this->params as $param) {
-            $return .= (string) $param;
+            $return .= $param;
         }
 
-        return $return;
+        return $return . PHP_EOL;
     }
 }

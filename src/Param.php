@@ -36,27 +36,27 @@ class Param
      */
     private function escape($value = '')
     {
-        return empty($value) ? '""' : $this->bool($value);
+        return empty($value) ? false : $value;
     }
 
-    /**
-     * @param $value
-     * @return mixed
-     */
-    private function bool($value)
-    {
-        if ($value === true) {
-            return 'true';
-        }
-        if ($value === false) {
-            return 'false';
-        }
-        if ($value === null) {
-            return 'null';
-        }
-
-        return is_numeric($value) ? $value : '"' . $value . '"';
-    }
+//    /**
+//     * @param $value
+//     * @return mixed
+//     */
+//    private function bool($value)
+//    {
+//        $values = [
+//            'true',
+//            'false',
+//            'null',
+//            'on',
+//            'off',
+//            'yes',
+//            'no'
+//        ];
+//
+//        return (in_array($value, $values, true) || is_numeric($value) || is_array($value) ? $value : '"' . $value . '"');
+//    }
 
     /**
      * @return mixed

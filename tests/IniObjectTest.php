@@ -4,35 +4,96 @@ declare(strict_types=1);
 
 namespace Compolomus\IniObject;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 class IniObjectTest extends TestCase
 {
-    public function testAddSection(): void
-    {
-    }
+    protected $object;
 
-    public function testSave(): void
+    protected function setUp(): void
     {
-    }
-
-    public function testRemoveSection(): void
-    {
+        $this->object = new IniObject(
+            'test.ini'
+//            ,[
+//                'strict'    => true,
+//                'overwrite' => false,
+//            ]
+        );
     }
 
     public function test__construct(): void
     {
+        try {
+            $this->assertIsObject($this->object);
+            $this->assertInstanceOf(IniObject::class, $this->object);
+        } catch (Exception $e) {
+            $this->assertContains('Must be initialized ', $e->getMessage());
+        }
     }
 
     public function testGetSection(): void
     {
+        $this->assertInstanceOf(Section::class, $this->object->getSection('global ini'));
+        $this->expectException(InvalidArgumentException::class);
+        $this->object->getSection('Dummy');
     }
 
-    public function test__toString(): void
+    public function testAddSection(): void
     {
+        $data = ['exclusive' => 'yes'];
+        $this->object->addSection('lns', $data);
+        $this->assertInstanceOf(Section::class, $this->object->getSection('lns'));
+        $this->expectException(InvalidArgumentException::class);
+        $this->object->addSection('lns', $data);
+    }
+
+    public function testRemoveSection(): void
+    {
+        $data = ['exclusive' => 'yes'];
+        $this->object->addSection('lns', $data);
+        $this->expectException(InvalidArgumentException::class);
+        $this->object->removeSection('Dummy');
+        $this->object->removeSection('lns');
+        $this->expectException(InvalidArgumentException::class);
+        $this->object->getSection('lns');
     }
 
     public function testUpdateSection(): void
     {
+        $data = ['exclusive' => 'yes'];
+        $this->object->addSection('lns', $data);
+        $data += ['ppp debug' => 'yes'];
+        $this->object->updateSection('lns', $data);
+        $this->expectException(InvalidArgumentException::class);
+        $this->object->updateSection('Dummy', $data);
+    }
+
+    public function test__toString(): void
+    {
+        $this->assertEquals(
+            strlen($this->object->__toString()),
+            strlen(file_get_contents('test.ini'))
+        ); // PHP_EOL file windows
+    }
+
+    public function testSave(): void
+    {
+        $this->object->save('dummy.ini');
+        $this->assertFileExists('dummy.ini');
+    }
+
+//    public function getSectionName(): void
+//    {
+//        $this->assertEquals(
+//            $this->object->getSection('global ini')->getName(),
+//            'global ini'
+//        );
+//    }
+
+    public static function tearDownAfterClass(): void
+    {
+        @unlink('dummy.ini');
     }
 }

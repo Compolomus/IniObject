@@ -23,23 +23,27 @@ class IniObject
      */
     public function __construct(string $filename = null, array $config = [])
     {
+        $data = [];
+
         if (! count($config)) {
             $this->initDefaultConfig();
         }
-
         if ($filename && file_exists($filename)) {
             $data = parse_ini_file(
                 $filename,
                 true,
                 $this->config['strict'] ? INI_SCANNER_TYPED : INI_SCANNER_NORMAL
             );
+        }
+        if (count($data) > 0) {
             $this->sectionLoad($data);
-            $this->filename = $filename;
+            $this->setFilename($filename);
         }
     }
 
     /**
      * @param array $data
+     * @throws InvalidArgumentException
      */
     private function sectionLoad(array $data): void
     {
@@ -122,7 +126,7 @@ class IniObject
             $return .= $section;
         }
 
-        return trim($return);
+        return trim($return) . PHP_EOL;
     }
 
     /**
@@ -131,15 +135,13 @@ class IniObject
      */
     public function save(string $filename = null): bool
     {
+        if (! $this->config['overwrite'] && file_exists($filename)) {
+            throw new InvalidArgumentException('Overwrite file protection');
+        }
         if ($filename) {
             $this->setFilename($filename);
         }
 
-        if (! $this->config['overwrite'] && file_exists($filename)) {
-            throw new InvalidArgumentException('Overwrite file protection');
-        }
-
-        $file = new SPLFileObject($this->filename, 'w+b');
-        return (bool) $file->fwrite((string) $this);
+        return (bool) (new SPLFileObject($this->filename, 'w+b'))->fwrite((string) $this);
     }
 }
