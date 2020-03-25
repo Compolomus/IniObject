@@ -11,7 +11,7 @@ class IniObject
 {
     private $filename;
 
-    private $config;
+    protected $config;
 
     private $sections;
 
@@ -33,11 +33,7 @@ class IniObject
                 true,
                 $this->config['strict'] ? INI_SCANNER_TYPED : INI_SCANNER_NORMAL
             );
-
             $this->sectionLoad($data);
-
-            echo '<pre>' . print_r($data, true) . '</pre>';
-
             $this->filename = $filename;
         }
     }
@@ -123,10 +119,10 @@ class IniObject
         $return = '';
 
         foreach ($this->sections as $section) {
-            $return .= (string) $section;
+            $return .= $section;
         }
 
-        return $return;
+        return trim($return);
     }
 
     /**
@@ -143,7 +139,7 @@ class IniObject
             throw new InvalidArgumentException('Overwrite file protection');
         }
 
-        $file = new SPLFileObject($this->filename, 'r+b');
+        $file = new SPLFileObject($this->filename, 'w+b');
         return (bool) $file->fwrite((string) $this);
     }
 }

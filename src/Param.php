@@ -32,22 +32,18 @@ class Param
 
     /**
      * @param string $value
-     * @return string
+     * @return mixed
      */
-    private function escape($value = ''): string
+    private function escape($value = '')
     {
-        return preg_match('#\s+#', $value)
-            ? '"' . $value . '"'
-            : (empty($value)
-                ? '""'
-                : $this->bool($value));
+        return empty($value) ? '""' : $this->bool($value);
     }
 
     /**
      * @param $value
-     * @return string
+     * @return mixed
      */
-    private function bool($value): string
+    private function bool($value)
     {
         if ($value === true) {
             return 'true';
@@ -58,7 +54,8 @@ class Param
         if ($value === null) {
             return 'null';
         }
-        return $value;
+
+        return is_numeric($value) ? $value : '"' . $value . '"';
     }
 
     /**
