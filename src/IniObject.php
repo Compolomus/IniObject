@@ -21,9 +21,9 @@ class IniObject
      * @param string|null $filename
      * @param array $config
      */
-    public function __construct(string $filename = null, array $config = [])
+    public function __construct(?string $filename = null, array $config = [])
     {
-        $data = [];
+        $data = false;
 
         if (! count($config)) {
             $this->initDefaultConfig();
@@ -35,7 +35,7 @@ class IniObject
                 $this->config['strict'] ? INI_SCANNER_TYPED : INI_SCANNER_NORMAL
             );
         }
-        if (count($data) > 0) {
+        if ($data) {
             $this->sectionLoad($data);
             $this->setFilename($filename);
         }
@@ -113,7 +113,7 @@ class IniObject
     /**
      * @param string $filename
      */
-    private function setFilename(string $filename): void
+    private function setFilename(?string $filename): void
     {
         $this->filename = $filename;
     }
