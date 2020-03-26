@@ -74,14 +74,14 @@ class IniObjectTest extends TestCase
     {
         $this->assertEquals(
             strlen($this->object->__toString()),
-            strlen(file_get_contents('test.ini'))
+            strlen(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'test.ini'))
         ); // PHP_EOL file windows
     }
 
     public function testSave(): void
     {
-        $this->object->save('dummy.ini');
-        $this->assertFileExists('dummy.ini');
+        $this->object->save(__DIR__ . DIRECTORY_SEPARATOR . 'dummy.ini');
+        $this->assertFileExists(__DIR__ . DIRECTORY_SEPARATOR . 'dummy.ini');
     }
 
 //    public function getSectionName(): void
@@ -94,6 +94,6 @@ class IniObjectTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        @unlink('dummy.ini');
+        @unlink(__DIR__ . DIRECTORY_SEPARATOR . 'dummy.ini');
     }
 }
