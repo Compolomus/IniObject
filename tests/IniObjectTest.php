@@ -15,7 +15,7 @@ class IniObjectTest extends TestCase
     protected function setUp(): void
     {
         $this->object = new IniObject(
-            'test.ini'
+            __DIR__ . DIRECTORY_SEPARATOR . 'test.ini'
 //            ,[
 //                'strict'    => true,
 //                'overwrite' => false,
@@ -37,7 +37,7 @@ class IniObjectTest extends TestCase
     {
         $this->assertEquals(
             Section::class,
-            get_class($this->object->getSection('global ini'))
+            get_class($this->object->getSection('global'))
         );
         $this->expectException(InvalidArgumentException::class);
         $this->object->getSection('Dummy');
