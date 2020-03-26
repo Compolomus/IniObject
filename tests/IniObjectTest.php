@@ -35,9 +35,9 @@ class IniObjectTest extends TestCase
 
     public function testGetSection(): void
     {
-        $this->assertInstanceOf(
+        $this->assertEquals(
             Section::class,
-            $section = $this->object->getSection('global ini')
+            get_class($this->object->getSection('global ini'))
         );
         $this->expectException(InvalidArgumentException::class);
         $this->object->getSection('Dummy');
