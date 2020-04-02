@@ -63,7 +63,7 @@ class Section
 
     /**
      * @param string $name
-     * @return mixed
+     * @return mixed|null
      */
     public function getParam(string $name)
     {

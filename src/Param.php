@@ -63,19 +63,19 @@ class Param
      */
     public function getValue()
     {
-        return $this->value;
+        return $this->value ?? null;
     }
 
     public function __toString(): string
     {
         $return = '';
 
-        if (is_array($this->value)) {
-            foreach ($this->value as $key => $value) {
-                $return .= $this->name . '[' . $key . '] = ' . $this->escape($value) . PHP_EOL;
+        if (is_array($this->getValue())) {
+            foreach ($this->getValue() as $key => $value) {
+                $return .= $this->getName() . '[' . $key . '] = ' . $this->escape($value) . PHP_EOL;
             }
         } else {
-            $return = $this->name . ' = ' . $this->value . PHP_EOL;
+            $return = $this->getName() . ' = ' . $this->value . PHP_EOL;
         }
 
         return $return;
