@@ -47,7 +47,8 @@ class IniObjectTest extends TestCase
     {
         $data = ['exclusive' => 'yes'];
         $this->object->addSection('lns', $data);
-        $this->assertInstanceOf(Section::class, $this->object->getSection('lns'));
+        $class = $this->object->getSection('lns');
+        $this->assertContainsOnlyInstancesOf(Section::class, [$class]);
         $this->expectException(InvalidArgumentException::class);
         $this->object->addSection('lns', $data);
     }
@@ -73,21 +74,19 @@ class IniObjectTest extends TestCase
         $this->object->updateSection('Dummy', $data);
     }
 
-//    public function test__toString(): void
-//    {
-//        if (PHP_OS_FAMILY === 'Windows') {
-//            $this->markTestIncomplete('PHP_EOL file windows'); //markTestSkipped
-//        }
-//        $this->assertEquals(
-//            strlen($this->object->__toString()),
-//            strlen(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'test.ini'))
-//        );
-//    }
-
     public function testSave(): void
     {
         $this->object->save(__DIR__ . DIRECTORY_SEPARATOR . 'dummy.ini');
         $this->assertFileExists(__DIR__ . DIRECTORY_SEPARATOR . 'dummy.ini');
+        $this->expectException(InvalidArgumentException::class);
+        $object = new IniObject(
+            __DIR__ . DIRECTORY_SEPARATOR . 'test.ini',
+            [
+                'strict'    => true,
+                'overwrite' => false,
+            ]
+        );
+        $object->save(__DIR__ . DIRECTORY_SEPARATOR . 'dummy.ini');
     }
 
     public function testGetSectionParamByName(): void
