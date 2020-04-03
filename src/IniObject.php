@@ -47,15 +47,10 @@ class IniObject
      */
     private function sectionLoad(array $data): void
     {
-        if (! count($data)) {
-            throw new InvalidArgumentException('Data is not set');
-        }
-
         $sections = [];
         foreach ($data as $sectionName => $params) {
             $sections[$sectionName] = new Section($sectionName, $params);
         }
-
         $this->sections = $sections;
     }
 

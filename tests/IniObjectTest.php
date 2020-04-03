@@ -110,22 +110,23 @@ class IniObjectTest extends TestCase
 
     public function testRemoveSectionParamByName(): void
     {
+        $object = $this->object->getSection('lac');
         $this->assertEquals(
-            $this->object->getSection('lac')->getParam('mtu'),
+            $object->getParam('mtu'),
             1410
         );
-        $this->object->getSection('lac')->remove('mtu');
+        $object->remove('mtu');
         $this->expectException(InvalidArgumentException::class);
-        $this->object->getSection('lac')->remove('mtu');
+        $object->remove('mmm');
     }
 
     public function testAddSectionParamByName(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->object->getSection('lac')->remove('mts');
-        $this->object->getSection('lac')->add('mts', 111);
+        $object = $this->object->getSection('lac');
+        $object->add('mts', 111);
         $this->assertEquals(
-            $this->object->getSection('lac')->getParam('mts'),
+            $object->getParam('mts'),
             111
         );
         $this->expectException(InvalidArgumentException::class);
