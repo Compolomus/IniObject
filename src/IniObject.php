@@ -28,7 +28,7 @@ class IniObject
         if (! count($config)) {
             $this->initDefaultConfig();
         }
-        if ($filename && file_exists($filename)) {
+        if ($filename !== null && file_exists($filename)) {
             $data = parse_ini_file(
                 $filename,
                 true,
@@ -133,7 +133,7 @@ class IniObject
         if (! $this->config['overwrite'] && file_exists($filename)) {
             throw new InvalidArgumentException('Overwrite file protection');
         }
-        if ($filename) {
+        if ($filename !== null) {
             $this->setFilename($filename);
         }
 
