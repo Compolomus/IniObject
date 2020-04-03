@@ -55,13 +55,9 @@ class IniObjectTest extends TestCase
 
     public function testRemoveSection(): void
     {
-        $data = ['exclusive' => 'yes'];
-        $this->object->addSection('lns', $data);
+        $this->object->removeSection('global');
         $this->expectException(InvalidArgumentException::class);
         $this->object->removeSection('Dummy');
-        $this->object->removeSection('lns');
-        $this->expectException(InvalidArgumentException::class);
-        $this->object->getSection('lns');
     }
 
     public function testUpdateSection(): void
