@@ -27,17 +27,17 @@ class IniObject
         if (! count($config)) {
             $this->initDefaultConfig();
         }
-        if ($filename !== null && file_exists($filename) && ! count($data)) {
+        if (! count($data) && file_exists($filename)) {
             $data = parse_ini_file(
                 $filename,
                 true,
                 $this->config['strict'] ? INI_SCANNER_TYPED : INI_SCANNER_NORMAL
             );
         }
-        if ($data) {
+        if (! empty($data)) {
             $this->sectionLoad($data);
-            $this->setFilename($filename);
         }
+        $this->setFilename($filename);
     }
 
     /**
