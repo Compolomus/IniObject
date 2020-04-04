@@ -20,7 +20,62 @@ use Compolomus\IniObject\IniObject;
 
 require __DIR__ . '/vendor/autoload.php';
 
-```
+$json = '{"test":{"param1":1,"param2":2},"test2":{"param3":3,"param4":4}}';
 
+$array = json_decode($json, true); // convert to array
+
+$object = new IniObject(
+    /*
+     If file exists, a load file, else set name to file save
+    */
+    'test.ini', // null default
+    /*
+     Array params to preload values
+    */
+    $array,
+    /*
+     Config params or default config (override protected property)
+    */
+    [
+        'strict'    => false,
+        'overwrite' => true,
+    ]
+);
+
+/*
+
+[test]
+
+param1 = 1
+param2 = 2
+
+[test2]
+
+param3 = 3
+param4 = 4
+*/
+echo $object; // ini file data
+
+/*
+ Get section params
+*/
+
+$params = $object->getSection('test')->toArray();
+
+echo '<pre>' . print_r($params, true) . '</pre>';
+/*
+ Array
+(
+    [param1] => 1
+    [param2] => 2
+)
+*/
+
+/*
+ Get param by name
+*/
+
+$param = $object->getSection('test')->getParam('param1'); // 1
 
 ```
+**More features see in tests**
