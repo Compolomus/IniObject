@@ -16,10 +16,6 @@ class IniObjectTest extends TestCase
     {
         $this->object = new IniObject(
             __DIR__ . DIRECTORY_SEPARATOR . 'test.ini'
-//            ,[
-//                'strict'    => true,
-//                'overwrite' => false,
-//            ]
         );
     }
 
@@ -31,6 +27,37 @@ class IniObjectTest extends TestCase
         } catch (Exception $e) {
             $this->assertContains('Must be initialized ', $e->getMessage());
         }
+    }
+
+    public function testLoadToArray(): void
+    {
+        $class = new IniObject(
+            'test.ini',
+            [
+                'test'  => [
+                    'param1' => 1,
+                    'param2' => 2,
+                ],
+                'test2' => [
+                    'param3' => 3,
+                    'param4' => 4,
+                ],
+            ]
+        );
+        $this->assertContainsOnlyInstancesOf(
+            Section::class,
+            [
+                $class->getSection('test'),
+                $class->getSection('test2'),
+            ]
+        );
+    }
+
+    public function testToArray(): void
+    {
+        $this->assertIsArray($this->object->toArray());
+        $this->assertArrayHasKey('global', $this->object->toArray());
+        $this->assertCount(3, $this->object->toArray());
     }
 
     public function testGetSection(): void
@@ -77,6 +104,7 @@ class IniObjectTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $object = new IniObject(
             __DIR__ . DIRECTORY_SEPARATOR . 'test.ini',
+            [],
             [
                 'strict'    => true,
                 'overwrite' => false,
