@@ -39,25 +39,6 @@ class Param
         return empty($value) ? false : $value;
     }
 
-//    /**
-//     * @param $value
-//     * @return mixed
-//     */
-//    private function bool($value)
-//    {
-//        $values = [
-//            'true',
-//            'false',
-//            'null',
-//            'on',
-//            'off',
-//            'yes',
-//            'no'
-//        ];
-//
-//        return (in_array($value, $values, true) || is_numeric($value) || is_array($value) ? $value : '"' . $value . '"');
-//    }
-
     /**
      * @return mixed
      */
@@ -79,5 +60,10 @@ class Param
         }
 
         return $return;
+    }
+
+    public function toArray(): array
+    {
+        return [$this->getName() => $this->value];
     }
 }

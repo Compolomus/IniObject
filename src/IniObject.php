@@ -19,16 +19,15 @@ class IniObject
      * IniObject constructor.
      *
      * @param string|null $filename
+     * @param array $data
      * @param array $config
      */
-    public function __construct(?string $filename = null, array $config = [])
+    public function __construct(?string $filename = null, array $data = [], array $config = [])
     {
-        $data = false;
-
         if (! count($config)) {
             $this->initDefaultConfig();
         }
-        if ($filename !== null && file_exists($filename)) {
+        if ($filename !== null && file_exists($filename) && ! count($data)) {
             $data = parse_ini_file(
                 $filename,
                 true,
@@ -122,6 +121,20 @@ class IniObject
         }
 
         return trim($return) . PHP_EOL;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $return = [];
+
+        foreach ($this->sections as $section) {
+            $return[$section->getName()] = $section->toArray();
+        }
+
+        return $return;
     }
 
     /**

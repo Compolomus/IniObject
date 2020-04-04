@@ -87,4 +87,15 @@ class Section
 
         return $return . PHP_EOL;
     }
+
+    public function toArray(): array
+    {
+        $return = [];
+
+        foreach ($this->params as $param) {
+            $return += $param->toArray();
+        }
+
+        return $return;
+    }
 }
